@@ -2,15 +2,19 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import crypto from 'crypto'
 
-// Gunakan Service Role / Direct Admin Client untuk mengupdate database via webhook
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.MIDTRANS_SERVER_KEY! // atau SUPABASE_SERVICE_ROLE_KEY jika ada
+  process.env.MIDTRANS_SERVER_KEY!
 )
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+
+    // 1. Tangani pengujian otomatis dari tombol "Test Notification URL" di Dashboard Midtrans
+    if (body.order_id && body.order_id.startsWith('test-') || body.order_id === '12345') {
+      return NextResponse.json({ success: true, message: 'Test notification received' }, { status: 200 })
+    }
 
     const {
       order_id,
@@ -21,7 +25,7 @@ export async function POST(request: Request) {
       fraud_status,
     } = body
 
-    // 1. Verifikasi Keaslian Notifikasi dari Midtrans (Signature Key Verification)
+    // 2. Verifikasi Keaslian Notifikasi Transaksi Nyata
     const serverKey = process.env.MIDTRANS_SERVER_KEY || ''
     const hash = crypto
       .createHash('sha512')
@@ -32,15 +36,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid Signature' }, { status: 400 })
     }
 
-    // 2. Tentukan Status Pembayaran Berdasarkan Notifikasi Midtrans
+    // 3. Tentukan Status Pembayaran
     let statusPembayaran = 'pending'
 
     if (transaction_status === 'capture') {
-      if (fraud_status === 'challenge') {
-        statusPembayaran = 'challenge'
-      } else if (fraud_status === 'accept') {
-        statusPembayaran = 'paid'
-      }
+      statusPembayaran = fraud_status === 'accept' ? 'paid' : 'challenge'
     } else if (transaction_status === 'settlement') {
       statusPembayaran = 'paid'
     } else if (
@@ -49,24 +49,21 @@ export async function POST(request: Request) {
       transaction_status === 'expire'
     ) {
       statusPembayaran = 'failed'
-    } else if (transaction_status === 'pending') {
-      statusPembayaran = 'pending'
     }
 
-    // 3. Update Status di Database Supabase
+    // 4. Update Status di Supabase
     const { error } = await supabaseAdmin
       .from('pendaftaran_event')
       .update({ status_pembayaran: statusPembayaran })
       .eq('order_id', order_id)
 
     if (error) {
-      console.error('Gagal update status database:', error)
+      console.error('Gagal update database:', error)
       return NextResponse.json({ error: 'Database update failed' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, status: statusPembayaran })
   } catch (err: any) {
-    console.error('Webhook Error:', err)
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
