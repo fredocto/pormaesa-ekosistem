@@ -81,12 +81,13 @@ export default function RegisterBridgePage() {
 
       if (dbError) throw dbError
 
-      // 2. Jika Gratis (Pelajar), langsung selesai
-      if (harga === 0) {
-        alert('Pendaftaran Berhasil! Kategori Pelajar Gratis.')
-        setLoading(false)
-        return
-      }
+      
+      // 2. Jika Gratis (Pelajar), langsung redirect ke E-Tiket
+if (harga === 0) {
+  alert('Pendaftaran Berhasil! Kategori Pelajar Gratis.')
+  window.location.href = `/ticket/${orderId}`
+  return
+}
 
       // 3. Jika Berbayar, Minta Token ke Midtrans
       const res = await fetch('/api/tokenizer', {
@@ -111,21 +112,22 @@ export default function RegisterBridgePage() {
       }
 
       // 4. Buka Pop-up Pembayaran Midtrans Snap
-      window.snap.pay(tokenData.token, {
-        onSuccess: function (result: any) {
-          alert('Pembayaran Berhasil!')
-          window.location.reload()
-        },
-        onPending: function (result: any) {
-          alert('Menunggu Pembayaran!')
-        },
-        onError: function (result: any) {
-          alert('Pembayaran Gagal!')
-        },
-        onClose: function () {
-          alert('Popup pembayaran ditutup sebelum transaksi selesai.')
-        },
-      })
+      // Ganti alert bawaan dengan redirect otomatis ke halaman e-tiket
+window.snap.pay(tokenData.token, {
+  onSuccess: function (result: any) {
+    window.location.href = `/ticket/${orderId}`
+  },
+  onPending: function (result: any) {
+    window.location.href = `/ticket/${orderId}`
+  },
+  onError: function (result: any) {
+    alert('Pembayaran gagal, silakan coba lagi.')
+  },
+  onClose: function () {
+    // Jika popup ditutup, tetap arahkan ke tiket agar bisa melakukan bayar ulang
+    window.location.href = `/ticket/${orderId}`
+  },
+})
     } catch (err: any) {
       alert(`Terjadi kesalahan: ${err.message}`)
     } finally {
