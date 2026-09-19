@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 
 export const metadata: Metadata = {
-  title: 'POR MAESA BRIDGE 2026',
+  title: 'MAESA OICO BRIDGE 2026',
   description: 'Website Pendaftaran Resmi Kejuaraan Bridge Pasangan POR MAESA 2026',
 }
 

@@ -5,6 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { COLORS } from '../colors'
 
+declare global {
+  interface Window {
+    snap: any
+  }
+}
+
 export default function RegisterBridgePage() {
   const [formData, setFormData] = useState({
     nama1: '',
@@ -33,21 +39,54 @@ export default function RegisterBridgePage() {
 
   const nominalBiaya = getBiaya(formData.kategori)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    // Simulasi respons cepat pendaftaran & instruksi transfer
-    setTimeout(() => {
-      if (nominalBiaya === 0) {
-        alert('Pendaftaran Kategori Pelajar Berhasil (GRATIS)! Silakan cek email Anda.')
-      } else {
-        alert(
-          `Pendaftaran Berhasil!\n\nSilakan lakukan transfer pendaftaran sebesar Rp ${nominalBiaya.toLocaleString('id-ID')} ke:\n\nBank BCA: 2181526698\na.n. Agustina D Awuy B\n\nKonfirmasi bukti transfer ke WhatsApp Ibu Agustina.`
-        )
-      }
+    // Jika Kategori Pelajar (Gratis)
+    if (nominalBiaya === 0) {
+      alert('Pendaftaran Kategori Pelajar Berhasil (GRATIS)! Silakan cek email Anda.')
       setLoading(false)
-    }, 500)
+      return
+    }
+
+    try {
+      const res = await fetch('/api/tokenizer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, totalBayar: nominalBiaya }),
+      })
+
+      const data = await res.json()
+
+      if (data.token && window.snap) {
+        // Buka Pop-up Midtrans Snap secara langsung
+        window.snap.pay(data.token, {
+          onSuccess: function (result: any) {
+            alert('Pembayaran Berhasil! E-Tiket akan segera dikirim.')
+            console.log(result)
+          },
+          onPending: function (result: any) {
+            alert('Menunggu pembayaran Anda. Silakan selesaikan instruksi pembayaran.')
+            console.log(result)
+          },
+          onError: function (result: any) {
+            alert('Pembayaran gagal. Silakan coba lagi.')
+            console.log(result)
+          },
+          onClose: function () {
+            alert('Anda menutup halaman pembayaran sebelum selesai.')
+          },
+        })
+      } else {
+        alert('Gagal memuat sistem pembayaran Midtrans. Pastikan Server Key Midtrans sudah diatur.')
+      }
+    } catch (err) {
+      console.error(err)
+      alert('Terjadi kesalahan koneksi ke gateway pembayaran.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
