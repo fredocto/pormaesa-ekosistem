@@ -1,217 +1,149 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
-
-declare global {
-  interface Window {
-    snap: any
-  }
-}
+import React, { useState } from 'react'
+import Link from 'next/link'
 
 export default function RegisterBridgePage() {
-  const supabase = createClient()
-
-  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    namaLengkap: '',
+    nama1: '',
     email: '',
-    noHp: '',
-    kategori: 'Umum',
-    namaPasangan: '',
+    phone: '',
+    nama2: '',
+    kategori: 'Umum - Rp 200.000 / pasangan',
   })
 
-  // Script Midtrans Snap Pop-up
-  useEffect(() => {
-    const snapScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js'
-    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || ''
+  const [loading, setLoading] = useState(false)
 
-    const script = document.createElement('script')
-    script.src = snapScriptUrl
-    script.setAttribute('data-client-key', clientKey)
-    document.body.appendChild(script)
-
-    return () => {
-      document.body.removeChild(script)
-    }
-  }, [])
-
-  const getHarga = (kategori: string) => {
-    switch (kategori) {
-      case 'Umum':
-        return 200000
-      case 'Junior U26':
-        return 100000
-      case 'Pelajar':
-        return 0
-      default:
-        return 200000
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-
-    try {
-      const harga = getHarga(formData.kategori)
-      const orderId = `BRIDGE-${Date.now()}`
-      const qrCodeToken = `QR-${Math.random().toString(36).substring(2, 9).toUpperCase()}`
-
-      // 1. Simpan Pendaftaran ke Database Supabase
-      const { data: eventData } = await supabase
-        .from('events')
-        .select('id')
-        .limit(1)
-        .single()
-
-      const { error: dbError } = await supabase.from('pendaftaran_event').insert({
-        event_id: eventData?.id || null,
-        order_id: orderId,
-        kategori_lomba: formData.kategori,
-        status_pembayaran: harga === 0 ? 'paid' : 'pending',
-        qr_code_token: qrCodeToken,
-        additional_data: {
-          nama_lengkap: formData.namaLengkap,
-          email: formData.email,
-          no_hp: formData.noHp,
-          nama_pasangan: formData.namaPasangan,
-        },
-      })
-
-      if (dbError) throw dbError
-
-      
-      // 2. Jika Gratis (Pelajar), langsung redirect ke E-Tiket
-if (harga === 0) {
-  alert('Pendaftaran Berhasil! Kategori Pelajar Gratis.')
-  window.location.href = `/ticket/${orderId}`
-  return
-}
-
-      // 3. Jika Berbayar, Minta Token ke Midtrans
-      const res = await fetch('/api/tokenizer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderId,
-          grossAmount: harga,
-          namaLengkap: formData.namaLengkap,
-          email: formData.email,
-          noHp: formData.noHp,
-          kategori: formData.kategori,
-        }),
-      })
-
-      const tokenData = await res.json()
-
-      if (tokenData.error) {
-        alert(tokenData.error)
-        setLoading(false)
-        return
-      }
-
-      // 4. Buka Pop-up Pembayaran Midtrans Snap
-      // Ganti alert bawaan dengan redirect otomatis ke halaman e-tiket
-window.snap.pay(tokenData.token, {
-  onSuccess: function (result: any) {
-    window.location.href = `/ticket/${orderId}`
-  },
-  onPending: function (result: any) {
-    window.location.href = `/ticket/${orderId}`
-  },
-  onError: function (result: any) {
-    alert('Pembayaran gagal, silakan coba lagi.')
-  },
-  onClose: function () {
-    // Jika popup ditutup, tetap arahkan ke tiket agar bisa melakukan bayar ulang
-    window.location.href = `/ticket/${orderId}`
-  },
-})
-    } catch (err: any) {
-      alert(`Terjadi kesalahan: ${err.message}`)
-    } finally {
-      setLoading(false)
-    }
+    // Alur pembayaran / integrasi Midtrans di sini
+    console.log('Data pendaftaran:', formData)
   }
 
   return (
-    <div style={{ maxWidth: '500px', margin: '40px auto', padding: '20px', fontFamily: 'sans-serif' }}>
-      <h2>Pendaftaran Kejuaraan Bridge Pasangan POR MAESA 2026</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <div>
-          <label>Nama Lengkap (Pemain 1):</label>
-          <input
-            type="text"
-            required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-            value={formData.namaLengkap}
-            onChange={(e) => setFormData({ ...formData, namaLengkap: e.target.value })}
-          />
-        </div>
+    <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', fontFamily: 'sans-serif', color: '#1e293b' }}>
+      {/* Header */}
+      <header style={{ background: '#0284c7', color: '#fff', padding: '15px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold', fontSize: '18px' }}>
+          ← POR MAESA BRIDGE
+        </Link>
+        <span style={{ fontSize: '14px', opacity: 0.9 }}>Form Pendaftaran</span>
+      </header>
 
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          />
-        </div>
+      {/* Main Form Container */}
+      <main style={{ maxWidth: '550px', margin: '40px auto', padding: '0 20px' }}>
+        <div style={{ background: '#fff', borderRadius: '12px', padding: '32px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', border: '1px solid #e2e8f0' }}>
+          
+          <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#0f172a', marginBottom: '8px', textAlign: 'center' }}>
+            Pendaftaran Kejuaraan Bridge
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748b', textAlign: 'center', marginBottom: '28px' }}>
+            Isi data pasangan bertanding Anda dengan benar.
+          </p>
 
-        <div>
-          <label>No. WhatsApp / HP:</label>
-          <input
-            type="tel"
-            required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-            value={formData.noHp}
-            onChange={(e) => setFormData({ ...formData, noHp: e.target.value })}
-          />
-        </div>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
+            {/* Nama Pemain 1 */}
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#334155' }}>
+                Nama Lengkap (Pemain 1) *
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="Contoh: Budi Santoso"
+                value={formData.nama1}
+                onChange={(e) => setFormData({ ...formData, nama1: e.target.value })}
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+              />
+            </div>
 
-        <div>
-          <label>Nama Pasangan (Pemain 2):</label>
-          <input
-            type="text"
-            required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-            value={formData.namaPasangan}
-            onChange={(e) => setFormData({ ...formData, namaPasangan: e.target.value })}
-          />
-        </div>
+            {/* Email */}
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#334155' }}>
+                Email (untuk pengiriman E-Tiket) *
+              </label>
+              <input
+                type="email"
+                required
+                placeholder="email@domain.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+              />
+            </div>
 
-        <div>
-          <label>Kategori Lomba:</label>
-          <select
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-            value={formData.kategori}
-            onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
-          >
-            <option value="Umum">Umum - Rp 200.000 / pasangan</option>
-            <option value="Junior U26">Junior U26 - Rp 100.000 / pasangan</option>
-            <option value="Pelajar">Pelajar - GRATIS</option>
-          </select>
-        </div>
+            {/* No WhatsApp */}
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#334155' }}>
+                No. WhatsApp / HP *
+              </label>
+              <input
+                type="tel"
+                required
+                placeholder="081234567890"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+              />
+            </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            padding: '12px',
-            backgroundColor: '#0070f3',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-          }}
-        >
-          {loading ? 'Memproses...' : 'Lanjut ke Pembayaran'}
-        </button>
-      </form>
+            {/* Nama Pemain 2 */}
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#334155' }}>
+                Nama Pasangan (Pemain 2) *
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="Contoh: Ahmad Hidayat"
+                value={formData.nama2}
+                onChange={(e) => setFormData({ ...formData, nama2: e.target.value })}
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            {/* Kategori Lomba */}
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#334155' }}>
+                Kategori Lomba *
+              </label>
+              <select
+                value={formData.kategori}
+                onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '15px', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }}
+              >
+                <option value="Umum - Rp 200.000 / pasangan">Umum — Rp 200.000 / pasangan</option>
+                <option value="Junior U26 - Rp 100.000 / pasangan">Junior U26 — Rp 100.000 / pasangan</option>
+                <option value="Pelajar - Gratis">Pelajar — GRATIS</option>
+              </select>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                marginTop: '10px',
+                padding: '14px',
+                backgroundColor: '#0284c7',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(2, 132, 199, 0.4)',
+                transition: 'background-color 0.2s',
+              }}
+            >
+              {loading ? 'Memproses...' : 'Lanjut ke Pembayaran'}
+            </button>
+
+          </form>
+        </div>
+      </main>
     </div>
   )
 }
