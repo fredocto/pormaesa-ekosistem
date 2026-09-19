@@ -32,14 +32,12 @@ export default function RegisterBridgePage() {
         <div style={{ display: 'flex', gap: '10px' }}>
           <button 
             type="button" 
-            onClick={() => alert('Fitur Login akan segera hadir!')}
             style={{ background: 'transparent', border: '1px solid #fff', color: '#fff', padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}
           >
             Login
           </button>
           <button 
             type="button" 
-            onClick={() => alert('Fitur Sign Up akan segera hadir!')}
             style={{ background: COLORS.accentGold, border: 'none', color: '#0F172A', padding: '5px 12px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '13px' }}
           >
             Sign Up
@@ -49,7 +47,7 @@ export default function RegisterBridgePage() {
 
       {/* Main Form Container */}
       <main style={{ maxWidth: '550px', margin: '40px auto', padding: '0 20px' }}>
-        {/* Card dengan Background Hijau Muda Soft (#F0FDF4) */}
+        {/* Card Hijau Muda Soft (#F0FDF4) */}
         <div style={{ background: '#F0FDF4', borderRadius: '16px', padding: '36px', boxShadow: '0 10px 25px -5px rgba(13, 138, 67, 0.1)', border: '1px solid #BBF7D0' }}>
           
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: COLORS.textHeading, marginBottom: '8px', textAlign: 'center' }}>
