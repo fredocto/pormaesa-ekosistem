@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { COLORS } from '../colors'
 
 export default function RegisterBridgePage() {
@@ -24,9 +25,16 @@ export default function RegisterBridgePage() {
   return (
     <div style={{ backgroundColor: COLORS.bgBody, minHeight: '100vh', fontFamily: 'sans-serif', color: COLORS.textBody }}>
       {/* Header */}
-      <header style={{ background: COLORS.primary, color: '#fff', padding: '15px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold', fontSize: '16px' }}>
-          ← POR MAESA BRIDGE
+      <header style={{ background: COLORS.primary, color: '#fff', padding: '12px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Image 
+            src="/logo.png" 
+            alt="Logo POR MAESA" 
+            width={36} 
+            height={36} 
+            style={{ objectFit: 'contain' }}
+          />
+          <span>← MAESA OICO BRIDGE</span>
         </Link>
         
         <div style={{ display: 'flex', gap: '10px' }}>

@@ -1,12 +1,26 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { COLORS } from './colors'
 
 export default function HomeBridge() {
   return (
     <div style={{ backgroundColor: COLORS.bgBody, color: COLORS.textBody, minHeight: '100vh', fontFamily: 'sans-serif' }}>
       {/* Header / Navbar */}
-      <header style={{ background: COLORS.primary, color: '#fff', padding: '15px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold', letterSpacing: '0.5px' }}>POR MAESA BRIDGE</h2>
+      <header style={{ background: COLORS.primary, color: '#fff', padding: '12px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+        
+        {/* Brand & Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Image 
+            src="/logo.png" 
+            alt="Logo POR MAESA" 
+            width={40} 
+            height={40} 
+            style={{ objectFit: 'contain' }}
+          />
+          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold', letterSpacing: '0.5px' }}>
+            MAESA OICO BRIDGE
+          </h2>
+        </div>
         
         {/* Navigasi Login & Sign Up */}
         <nav style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
