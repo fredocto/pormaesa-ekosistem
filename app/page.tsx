@@ -46,15 +46,28 @@ export default function HomeBridge() {
 
       {/* Hero Section */}
       <section style={{ textAlign: 'center', padding: '60px 20px', maxWidth: '850px', margin: '0 auto' }}>
-        <span style={{ background: '#FEF3C7', color: '#B45309', padding: '8px 16px', borderRadius: '20px', fontSize: '14px', fontWeight: 'bold', border: '1px solid #FDE68A' }}>
-          Minggu, 18 Oktober 2026 • Mega Bekasi Hypermall
-        </span>
-
-        <h1 style={{ fontSize: '38px', marginTop: '24px', color: COLORS.textHeading, fontWeight: '800', lineHeight: '1.2' }}>
-          KEJUARAAN BRIDGE PASANGAN POR MAESA 2026
-        </h1>
         
-        <p style={{ fontSize: '18px', color: COLORS.textMuted, lineHeight: '1.6', marginTop: '16px' }}>
+        {/* Title 3 Baris */}
+        <h1 style={{ fontSize: '42px', marginTop: '10px', color: COLORS.textHeading, fontWeight: '800', lineHeight: '1.25', textTransform: 'uppercase', letterSpacing: '1px' }}>
+          KEJUARAAN<br />
+          BRIDGE PASANGAN<br />
+          POR MAESA
+        </h1>
+
+        {/* Tanggal & Venue dibawah Title */}
+        <div style={{ marginTop: '24px', marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+          <span style={{ background: '#FEF3C7', color: '#B45309', padding: '8px 18px', borderRadius: '20px', fontSize: '15px', fontWeight: 'bold', border: '1px solid #FDE68A', display: 'inline-block' }}>
+            MINGGU, 18 OKTOBER 2026
+          </span>
+          <p style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: COLORS.textBody }}>
+            Hall Mega Bekasi Hypermall-Lantai 3
+          </p>
+          <p style={{ margin: 0, fontSize: '15px', color: COLORS.textMuted }}>
+            Bekasi
+          </p>
+        </div>
+        
+        <p style={{ fontSize: '18px', color: COLORS.textMuted, lineHeight: '1.6', marginTop: '20px' }}>
           Bertanding Bersilaturahmi Mempererat Keluarga Besar POR MAESA.<br />
           <em>Bridge More Than a Game, A Lifelong Friendship!</em>
         </p>
