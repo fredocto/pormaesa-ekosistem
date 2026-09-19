@@ -11,15 +11,33 @@ export default function RegisterBridgePage() {
     email: '',
     phone: '',
     nama2: '',
-    kategori: 'Umum - Rp 200.000 / pasangan',
+    kategori: 'Senior',
   })
 
   const [loading, setLoading] = useState(false)
 
+  // Function untuk menghitung biaya berdasarkan kategori pilihan
+  const getBiaya = (kategori: string) => {
+    switch (kategori) {
+      case 'Senior':
+      case 'Ladies':
+      case 'Mixed':
+        return 200000
+      case 'Junior U26':
+        return 100000
+      case 'Pelajar':
+        return 0
+      default:
+        return 200000
+    }
+  }
+
+  const nominalBiaya = getBiaya(formData.kategori)
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    console.log('Data pendaftaran:', formData)
+    console.log('Data pendaftaran:', { ...formData, totalBayar: nominalBiaya })
   }
 
   return (
@@ -55,7 +73,6 @@ export default function RegisterBridgePage() {
 
       {/* Main Form Container */}
       <main style={{ maxWidth: '550px', margin: '40px auto', padding: '0 20px' }}>
-        {/* Card Hijau Muda Soft (#F0FDF4) */}
         <div style={{ background: '#F0FDF4', borderRadius: '16px', padding: '36px', boxShadow: '0 10px 25px -5px rgba(13, 138, 67, 0.1)', border: '1px solid #BBF7D0' }}>
           
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: COLORS.textHeading, marginBottom: '8px', textAlign: 'center' }}>
@@ -137,10 +154,20 @@ export default function RegisterBridgePage() {
                 onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
                 style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #86EFAC', backgroundColor: '#FFFFFF', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
               >
-                <option value="Umum - Rp 200.000 / pasangan">Umum — Rp 200.000 / pasangan</option>
-                <option value="Junior U26 - Rp 100.000 / pasangan">Junior U26 — Rp 100.000 / pasangan</option>
-                <option value="Pelajar - Gratis">Pelajar — GRATIS</option>
+                <option value="Senior">Senior — Rp 200.000 / pasangan</option>
+                <option value="Ladies">Ladies — Rp 200.000 / pasangan</option>
+                <option value="Mixed">Mixed — Rp 200.000 / pasangan</option>
+                <option value="Junior U26">Junior U26 — Rp 100.000 / pasangan</option>
+                <option value="Pelajar">Pelajar — GRATIS</option>
               </select>
+            </div>
+
+            {/* Ringkasan Biaya */}
+            <div style={{ background: '#FFFFFF', padding: '16px', borderRadius: '8px', border: '1px solid #86EFAC', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '14px', fontWeight: '600', color: COLORS.textMuted }}>Total Biaya Pendaftaran:</span>
+              <span style={{ fontSize: '18px', fontWeight: 'bold', color: nominalBiaya === 0 ? '#16A34A' : COLORS.primary }}>
+                {nominalBiaya === 0 ? 'GRATIS' : `Rp ${nominalBiaya.toLocaleString('id-ID')}`}
+              </span>
             </div>
 
             {/* Submit Button */}
@@ -148,7 +175,7 @@ export default function RegisterBridgePage() {
               type="submit"
               disabled={loading}
               style={{
-                marginTop: '12px',
+                marginTop: '8px',
                 padding: '14px',
                 background: `linear-gradient(135deg, ${COLORS.primary} 0%, #10B981 100%)`,
                 color: '#fff',
@@ -160,7 +187,7 @@ export default function RegisterBridgePage() {
                 boxShadow: '0 4px 12px rgba(13, 138, 67, 0.3)',
               }}
             >
-              {loading ? 'Memproses...' : 'Lanjut ke Pembayaran'}
+              {loading ? 'Memproses...' : nominalBiaya === 0 ? 'Daftar Sekarang' : 'Lanjut ke Pembayaran'}
             </button>
 
           </form>

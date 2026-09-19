@@ -28,36 +28,16 @@ export default function HomeBridge() {
             Daftar Event
           </Link>
           
-          {/* Tombol Login */}
           <button 
             type="button" 
-            style={{
-              background: 'transparent',
-              border: '1px solid #fff',
-              color: '#fff',
-              padding: '6px 16px',
-              borderRadius: '6px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
+            style={{ background: 'transparent', border: '1px solid #fff', color: '#fff', padding: '6px 16px', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' }}
           >
             Login
           </button>
 
-          {/* Tombol Sign Up */}
           <button 
             type="button" 
-            style={{
-              background: COLORS.accentGold,
-              border: 'none',
-              color: '#0F172A',
-              padding: '6px 16px',
-              borderRadius: '6px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
+            style={{ background: COLORS.accentGold, border: 'none', color: '#0F172A', padding: '6px 16px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px' }}
           >
             Sign Up
           </button>
@@ -111,7 +91,7 @@ export default function HomeBridge() {
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
           <div style={{ background: COLORS.bgCard, padding: '24px', borderRadius: '12px', border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-            <h4 style={{ margin: '0 0 8px 0', color: COLORS.textBody }}>Kategori Umum</h4>
+            <h4 style={{ margin: '0 0 8px 0', color: COLORS.textBody }}>Senior / Ladies / Mixed</h4>
             <p style={{ fontSize: '22px', fontWeight: 'bold', color: COLORS.primary, margin: 0 }}>
               Rp 200.000 <span style={{ fontSize: '12px', color: COLORS.textMuted, fontWeight: 'normal' }}>/ pasangan</span>
             </p>
