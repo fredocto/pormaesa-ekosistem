@@ -30,14 +30,32 @@ export default function HomeBridge() {
           
           <button 
             type="button" 
-            style={{ background: 'transparent', border: '1px solid #fff', color: '#fff', padding: '6px 16px', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' }}
+            style={{
+              background: 'transparent',
+              border: '1px solid #fff',
+              color: '#fff',
+              padding: '6px 16px',
+              borderRadius: '6px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
           >
             Login
           </button>
 
           <button 
             type="button" 
-            style={{ background: COLORS.accentGold, border: 'none', color: '#0F172A', padding: '6px 16px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px' }}
+            style={{
+              background: COLORS.accentGold,
+              border: 'none',
+              color: '#0F172A',
+              padding: '6px 16px',
+              borderRadius: '6px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
           >
             Sign Up
           </button>
@@ -54,7 +72,7 @@ export default function HomeBridge() {
           POR MAESA
         </h1>
 
-        {/* Tanggal & Venue dibawah Title */}
+        {/* Tanggal & Venue */}
         <div style={{ marginTop: '24px', marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
           <span style={{ background: '#FEF3C7', color: '#B45309', padding: '8px 18px', borderRadius: '20px', fontSize: '15px', fontWeight: 'bold', border: '1px solid #FDE68A', display: 'inline-block' }}>
             MINGGU, 18 OKTOBER 2026
@@ -96,8 +114,8 @@ export default function HomeBridge() {
         </Link>
       </section>
 
-      {/* Rincian Kategori */}
-      <section style={{ maxWidth: '900px', margin: '0 auto 60px auto', padding: '0 20px' }}>
+      {/* Rincian Kategori Biaya */}
+      <section style={{ maxWidth: '900px', margin: '0 auto 50px auto', padding: '0 20px' }}>
         <h3 style={{ textAlign: 'center', marginBottom: '24px', color: COLORS.textHeading, fontSize: '22px' }}>
           Biaya Pendaftaran (Early Bird s/d 2 Okt 2026)
         </h3>
@@ -124,8 +142,78 @@ export default function HomeBridge() {
         </div>
       </section>
 
-      <footer style={{ textAlign: 'center', padding: '24px', borderTop: `1px solid ${COLORS.border}`, color: COLORS.textMuted, fontSize: '14px' }}>
-        © 2026 POR MAESA — Ekosistem Digital Olahraga
+      {/* Section: HADIAH & PENGHARGAAN */}
+      <section style={{ maxWidth: '900px', margin: '0 auto 60px auto', padding: '0 20px' }}>
+        <div style={{ background: '#F0FDF4', borderRadius: '16px', padding: '36px', border: '1px solid #BBF7D0', boxShadow: '0 4px 6px -1px rgba(13, 138, 67, 0.05)' }}>
+          <h3 style={{ textAlign: 'center', margin: '0 0 8px 0', color: COLORS.textHeading, fontSize: '24px', fontWeight: 'bold' }}>
+            HADIAH & PENGHARGAAN
+          </h3>
+          <p style={{ textAlign: 'center', color: COLORS.textMuted, fontSize: '14px', marginBottom: '28px' }}>
+            Piala & Tabungan untuk Pemenang Sesuai Kategori
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+            {/* Kartu Hadiah Umum / Utama */}
+            <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid #86EFAC' }}>
+              <h4 style={{ color: COLORS.primary, margin: '0 0 10px 0', fontSize: '16px' }}>Kategori Utama / Umum</h4>
+              <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.textBody, fontSize: '14px', lineHeight: '1.8' }}>
+                <li>Juara I : Tabungan + Piala</li>
+                <li>Juara II : Tabungan + Piala</li>
+                <li>Juara III : Tabungan + Piala</li>
+                <li>Peringkat IV – X : Tabungan</li>
+              </ul>
+            </div>
+
+            {/* Kartu Hadiah Khusus Kategori */}
+            <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid #86EFAC' }}>
+              <h4 style={{ color: COLORS.primary, margin: '0 0 10px 0', fontSize: '16px' }}>Kategori Khusus</h4>
+              <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.textBody, fontSize: '14px', lineHeight: '1.8' }}>
+                <li>Best Senior : Tabungan</li>
+                <li>Best Ladies : Tabungan</li>
+                <li>Best Mixed : Tabungan</li>
+                <li>Best Junior U26 : Tabungan</li>
+                <li>Best Pelajar : Tabungan</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer & Kontak Informasi */}
+      <footer style={{ background: '#FFFFFF', borderTop: `1px solid ${COLORS.border}`, padding: '40px 20px 24px 20px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <h4 style={{ margin: '0 0 12px 0', color: COLORS.textHeading, fontSize: '16px', fontWeight: 'bold' }}>
+            INFORMASI LEBIH LENGKAP:
+          </h4>
+
+          {/* Tombol Kontak WhatsApp Ibu Agustina */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
+            <a 
+              href="https://wa.me/628161436051" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                background: '#25D366',
+                color: '#FFFFFF',
+                padding: '12px 24px',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)',
+              }}
+            >
+              💬 <strong>Agustina D. Awuy B. — 08161436051</strong>
+            </a>
+          </div>
+
+          <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: '20px', color: COLORS.textMuted, fontSize: '14px' }}>
+            © 2026 POR MAESA
+          </div>
+        </div>
       </footer>
     </div>
   )
