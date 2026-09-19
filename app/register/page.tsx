@@ -16,7 +16,6 @@ export default function RegisterBridgePage() {
 
   const [loading, setLoading] = useState(false)
 
-  // Function untuk menghitung biaya berdasarkan kategori pilihan
   const getBiaya = (kategori: string) => {
     switch (kategori) {
       case 'Senior':
@@ -37,7 +36,18 @@ export default function RegisterBridgePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    console.log('Data pendaftaran:', { ...formData, totalBayar: nominalBiaya })
+
+    // Simulasi respons cepat pendaftaran & instruksi transfer
+    setTimeout(() => {
+      if (nominalBiaya === 0) {
+        alert('Pendaftaran Kategori Pelajar Berhasil (GRATIS)! Silakan cek email Anda.')
+      } else {
+        alert(
+          `Pendaftaran Berhasil!\n\nSilakan lakukan transfer pendaftaran sebesar Rp ${nominalBiaya.toLocaleString('id-ID')} ke:\n\nBank BCA: 2181526698\na.n. Agustina D Awuy B\n\nKonfirmasi bukti transfer ke WhatsApp Ibu Agustina.`
+        )
+      }
+      setLoading(false)
+    }, 500)
   }
 
   return (
