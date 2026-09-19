@@ -1,53 +1,43 @@
 import { NextResponse } from 'next/server'
+// @ts-ignore
+import Midtrans from 'midtrans-client'
+
+const snap = new Midtrans.Snap({
+  isProduction: false,
+  serverKey: process.env.MIDTRANS_SERVER_KEY || 'SB-Mid-server-DUMMY',
+  clientKey: process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || 'SB-Mid-client-DUMMY',
+})
 
 export async function POST(request: Request) {
   try {
-    const { orderId, grossAmount, namaLengkap, email, noHp, kategori } = await request.json()
+    const { nama1, email, phone, nama2, kategori, totalBayar } = await request.json()
 
-    const serverKey = process.env.MIDTRANS_SERVER_KEY
-    if (!serverKey) {
-      return NextResponse.json({ error: 'Server Key Midtrans belum dikonfigurasi' }, { status: 500 })
-    }
+    const orderId = `BRIDGE-${Date.now()}`
 
-    const authString = Buffer.from(`${serverKey}:`).toString('base64')
-
-    // Panggil Endpoint Snap Midtrans (Gunakan https://app.midtrans.com/snap/v1/transactions untuk Production)
-    const response = await fetch('https://app.sandbox.midtrans.com/snap/v1/transactions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Basic ${authString}`,
+    const parameter = {
+      transaction_details: {
+        order_id: orderId,
+        gross_amount: totalBayar,
       },
-      body: JSON.stringify({
-        transaction_details: {
-          order_id: orderId,
-          gross_amount: grossAmount,
+      customer_details: {
+        first_name: nama1,
+        email: email,
+        phone: phone,
+      },
+      item_details: [
+        {
+          id: kategori,
+          price: totalBayar,
+          quantity: 1,
+          name: `Pendaftaran Bridge: ${kategori} (${nama1} & ${nama2})`,
         },
-        item_details: [
-          {
-            id: kategori,
-            price: grossAmount,
-            quantity: 1,
-            name: `Pendaftaran Bridge - ${kategori}`,
-          },
-        ],
-        customer_details: {
-          first_name: namaLengkap,
-          email: email,
-          phone: noHp,
-        },
-      }),
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      return NextResponse.json({ error: data.error_messages || 'Gagal membuat transaksi Midtrans' }, { status: 400 })
+      ],
     }
 
-    return NextResponse.json({ token: data.token, redirect_url: data.redirect_url })
-  } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    const token = await snap.createTransactionToken(parameter)
+    return NextResponse.json({ token, orderId })
+  } catch (error: any) {
+    console.error('Error Midtrans Token:', error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
