@@ -178,7 +178,7 @@ export default function HomeBridge() {
           
           {/* Teks Informasi & Pendaftaran (Biasa, Tidak Bold) */}
           <p style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#E2E8F0', opacity: 0.9 }}>
-            Informasi & Pendaftaran:
+            Informasi Lengkap Hubungi:
           </p>
 
           {/* Nama & Nomor WA dengan Logo /public/logo-wa.png */}
