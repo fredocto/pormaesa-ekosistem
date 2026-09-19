@@ -7,9 +7,48 @@ export default function HomeBridge() {
       {/* Header / Navbar */}
       <header style={{ background: COLORS.primary, color: '#fff', padding: '15px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
         <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold', letterSpacing: '0.5px' }}>POR MAESA BRIDGE</h2>
-        <nav style={{ display: 'flex', gap: '20px' }}>
-          <Link href="/register" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>Daftar Event</Link>
-          <Link href="/admin/dashboard" style={{ color: COLORS.bgBody, textDecoration: 'none', opacity: 0.9 }}>Dashboard Pengurus</Link>
+        
+        {/* Navigasi Login & Sign Up (Belum Aktif) */}
+        <nav style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <Link href="/register" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold', marginRight: '10px' }}>
+            Daftar Event
+          </Link>
+          
+          {/* Tombol Login */}
+          <button 
+            type="button" 
+            onClick={() => alert('Fitur Login akan segera hadir!')}
+            style={{
+              background: 'transparent',
+              border: '1px solid #fff',
+              color: '#fff',
+              padding: '6px 16px',
+              borderRadius: '6px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+          >
+            Login
+          </button>
+
+          {/* Tombol Sign Up */}
+          <button 
+            type="button" 
+            onClick={() => alert('Fitur Sign Up akan segera hadir!')}
+            style={{
+              background: COLORS.accentGold,
+              border: 'none',
+              color: '#0F172A',
+              padding: '6px 16px',
+              borderRadius: '6px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+          >
+            Sign Up
+          </button>
         </nav>
       </header>
 
@@ -67,7 +106,7 @@ export default function HomeBridge() {
           </div>
 
           <div style={{ background: COLORS.bgCard, padding: '24px', borderRadius: '12px', border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-            <h4 style={{ margin: '0 0 8px 0', color: COLORS.textBody }}>Junior U26</h4>
+            <h4 style={{ margin: '0 0 8px 0', color COLORS.textBody }}>Junior U26</h4>
             <p style={{ fontSize: '22px', fontWeight: 'bold', color: COLORS.primary, margin: 0 }}>
               Rp 100.000 <span style={{ fontSize: '12px', color: COLORS.textMuted, fontWeight: 'normal' }}>/ pasangan</span>
             </p>
